@@ -3,6 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ProgramModule } from './program/program.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ProgrammingModule } from './programming/programming.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true, // Esto crea automáticamente las tablas al iniciar la aplicación (solo para desarrollo)
     }),
+    ProgrammingModule,
   ],
   controllers: [AppController],
   providers: [AppService],

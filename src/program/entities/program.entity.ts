@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Programming } from 'src/programming/entities/programming.entity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Program {
@@ -10,4 +11,10 @@ export class Program {
 
   @Column()
   duration: number;
+
+  @OneToMany(
+    () => Programming,
+    (programming: Programming) => programming.program,
+  )
+  programming: Programming[]; // Tiene una lista de programacciones
 }
