@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { ProgramModule } from './program/program.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProgrammingModule } from './programming/programming.module';
+import { ElementModule } from './element/element.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { ProgrammingModule } from './programming/programming.module';
       synchronize: true, // Esto crea automáticamente las tablas al iniciar la aplicación (solo para desarrollo)
     }),
     ProgrammingModule,
+    ElementModule,
   ],
   controllers: [AppController],
   providers: [AppService],

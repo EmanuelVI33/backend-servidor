@@ -1,5 +1,12 @@
+import { Element } from 'src/element/entities/element.entity';
 import { Program } from 'src/program/entities/program.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class Programming {
@@ -17,4 +24,8 @@ export class Programming {
 
   @ManyToOne(() => Program, (program: Program) => program.programming)
   program: Program;
+
+  // Tienen de uno a muchos elementos
+  @OneToMany(() => Element, (element: Element) => element.programming)
+  elements: Element[];
 }
