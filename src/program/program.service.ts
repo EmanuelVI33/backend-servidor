@@ -12,9 +12,9 @@ export class ProgramService {
     private readonly programRepository: Repository<Program>,
   ) {}
 
-  create(createProgramDto: CreateProgramDto): Promise<Program> {
+  async create(createProgramDto: CreateProgramDto): Promise<Program> {
     const program = this.programRepository.create(createProgramDto);
-    return this.programRepository.save(program);
+    return await this.programRepository.save(program);
   }
 
   findAll() {

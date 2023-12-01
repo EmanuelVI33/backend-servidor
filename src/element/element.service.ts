@@ -1,80 +1,44 @@
 import { Injectable } from '@nestjs/common';
-import { CreateElementDto } from './dto/create-element.dto';
 import { UpdateElementDto } from './dto/update-element.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Video } from './entities/video.entity';
 import { Repository } from 'typeorm';
-import { Imagen } from './entities/imagen.entity';
 import { Element } from './entities/element.entity';
-import { Music } from './entities/music.entity';
-import { PresenterVideo } from './entities/presenter-video.entity';
+import { Programming } from 'src/programming/entities/programming.entity';
+import { ElementFactory } from './entities/element.factory';
 
 @Injectable()
 export class ElementService {
-  // constructor(
-  //   @InjectRepository(Element)
-  //   private readonly elementRepository: Repository<Element>,
-  //   @InjectRepository(Imagen)
-  //   private readonly imagenRepository: Repository<Imagen>,
-  //   @InjectRepository(Video)
-  //   private readonly videoRepository: Repository<Video>,
-  //   @InjectRepository(Music)
-  //   private readonly musicRepository: Repository<Music>,
-  //   @InjectRepository(PresenterVideo)
-  //   private readonly presenterVideoRepository: Repository<PresenterVideo>,
-  // ) {}
+  constructor(
+    @InjectRepository(Element)
+    private readonly elementRepository: Repository<Element>,
+    @InjectRepository(Programming)
+    private readonly programmingRepository: Repository<Programming>,
+    private readonly elementFactory: ElementFactory,
+  ) {}
 
-  async create(createElementDto: CreateElementDto) {
-    // const elementType = createElementDto.type; // Supongamos que tienes un campo 'type' en tu payload
-    // let createdElement;
+  async create(data: any) {
+    const j = JSON.stringify(data);
+    console.log(`Mostrar Data ${j}`);
+    const newElement = await this.elementFactory.createElement(data);
 
-    // switch (elementType) {
-    //   case 'imagen':
-    //     console.log('Holaaa');
-    //     createdElement = await this.imagenRepository.save(
-    //       this.imagenRepository.create(createElementDto),
-    //     );
-    //     break;
+    const programming = await this.programmingRepository.findOneBy({
+      id: data.programmingId,
+    });
 
-    //   case 'video':
-    //     createdElement = await this.videoRepository.save(
-    //       this.videoRepository.create(createElementDto),
-    //     );
-    //     break;
+    console.log(`Resultado de la fabríca ${+newElement.id}`);
 
-    //   case 'music':
-    //     createdElement = await this.musicRepository.save(
-    //       this.musicRepository.create(createElementDto),
-    //     );
-    //     break;
+    if (programming) {
+      if (!programming.elements) {
+        programming.elements = [];
+      }
+      // programming.elements.push(newElement.id);
+      await this.programmingRepository.save(programming);
+    }
 
-    //   case 'presenter-video':
-    //     createdElement = await this.presenterVideoRepository.save(
-    //       this.presenterVideoRepository.create(createElementDto),
-    //     );
-    //     break;
-
-    //   default:
-    //     throw new Error('Tipo de elemento no soportado');
-    // }
-
-    // return createdElement;
-    return '';
+    return newElement;
   }
 
   async findAll() {
-    // const elements = await this.elementRepository.find();
-
-    // // Obtén todos los elementos de la clase hija 'Imagen'
-    // const imagenElements = await this.imagenRepository.find();
-
-    // // Combina los resultados
-    // const allElements = elements.concat(imagenElements);
-
-    // // Mapea los resultados a DTO si es necesario
-    // // const mappedElements = allElements.map((element) => this.mapToDto(element));
-
-    // return allElements;
     return '';
   }
 
@@ -83,7 +47,7 @@ export class ElementService {
       id: element.id,
       path: element.path,
       index: element.index,
-      programmingId: element.programming.id, // Asegúrate de ajustar esto según tu relación real
+      // programmingId: element.programming.id, // Asegúrate de ajustar esto según tu relación real
     };
   }
 

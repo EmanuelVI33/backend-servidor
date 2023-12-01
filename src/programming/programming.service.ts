@@ -22,6 +22,8 @@ export class ProgrammingService {
 
     const program = await this.programRepository.findOneBy({ id: programId });
 
+    console.log(`Programa ${program.id}`);
+
     if (!program) {
       // Manejo de error si el programa no existe
       throw new Error('Programa no encontrado');
@@ -31,6 +33,9 @@ export class ProgrammingService {
       ...programmingData,
       program,
     });
+
+    // Inicializar
+    programming.elements = [];
 
     return this.programmingRepository.save(programming);
   }

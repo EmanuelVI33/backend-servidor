@@ -2,17 +2,16 @@ import { Module } from '@nestjs/common';
 import { ElementService } from './element.service';
 import { ElementController } from './element.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Element } from './entities/element.entity';
+import { Element, Video, Imagen, Music, PresenterVideo } from './entities';
 import { Programming } from 'src/programming/entities/programming.entity';
-import { Video } from './entities/video.entity';
-import { Imagen } from './entities/imagen.entity';
-import { PresenterVideo } from './entities/presenter-video.entity';
+import { ElementFactory } from './entities/element.factory';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
       Element,
       Video,
+      Music,
       Imagen,
       PresenterVideo,
       Programming,
@@ -20,6 +19,6 @@ import { PresenterVideo } from './entities/presenter-video.entity';
   ],
   exports: [TypeOrmModule.forFeature([Element])],
   controllers: [ElementController],
-  providers: [ElementService],
+  providers: [ElementService, ElementFactory],
 })
 export class ElementModule {}

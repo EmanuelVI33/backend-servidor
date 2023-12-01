@@ -1,27 +1,39 @@
-import { Programming } from 'src/programming/entities/programming.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, PrimaryGeneratedColumn } from 'typeorm';
+import { ElementOptions } from '../interfaces/ElementOption';
 
-interface IElement {
-  id: number;
-  path: string;
-  index: number;
-}
-
-@Entity()
-export class Element implements IElement {
+export abstract class Element {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  path: string;
+  @Column({ nullable: true })
+  path?: string;
 
   @Column()
   index: number;
 
+  @Column()
+  type: string;
+
   // Un elemento pertenece a una programación
-  @ManyToOne(
-    () => Programming,
-    (programming: Programming) => programming.elements,
-  )
-  programming: Programming;
+  // @ManyToOne(
+  //   () => Programming,
+  //   (programming: Programming) => programming.elements,
+  // )
+  // @Column()
+  // programming: Programming;
+
+  constructor(
+    options: ElementOptions = {
+      type: '',
+      path: '',
+      index: 0,
+      // programming: null,
+    },
+  ) {
+    console.log(`Desde contructor Element ${options}`);
+    this.type = options.type;
+    this.path = options.path;
+    this.index = options.index;
+    // this.programming = options.programming;
+  }
 }

@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { ElementService } from './element.service';
 import { CreateElementDto } from './dto/create-element.dto';
 import { UpdateElementDto } from './dto/update-element.dto';
@@ -8,8 +16,11 @@ export class ElementController {
   constructor(private readonly elementService: ElementService) {}
 
   @Post()
-  create(@Body() createElementDto: CreateElementDto) {
-    return this.elementService.create(createElementDto);
+  create(@Body() createElementDto: any) {
+    // const j = JSON.stringify(createElementDto);
+    // console.log(j);
+    const createdElement = this.elementService.create(createElementDto);
+    return { message: 'Element created successfully', element: createdElement };
   }
 
   @Get()

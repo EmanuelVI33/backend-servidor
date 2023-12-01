@@ -1,8 +1,22 @@
 import { Column, Entity } from 'typeorm';
 import { Element } from './element.entity';
+import { ElementOptions } from '../interfaces/ElementOption';
 
 @Entity()
 export class Video extends Element {
   @Column()
   title: string;
+
+  constructor(
+    options: ElementOptions = {
+      type: '',
+      path: '',
+      index: 0,
+      programming: null,
+      title: '',
+    },
+  ) {
+    super(options);
+    this.title = options.title;
+  }
 }

@@ -6,19 +6,21 @@ import {
   Patch,
   Param,
   Delete,
+  Post,
 } from '@nestjs/common';
 import { ProgramService } from './program.service';
 // import { CreateProgramDto } from './dto/create-program.dto';
 import { UpdateProgramDto } from './dto/update-program.dto';
+import { CreateProgramDto } from './dto/create-program.dto';
 
 @Controller('program')
 export class ProgramController {
   constructor(private readonly programService: ProgramService) {}
 
-  // @Post()
-  // create(@Body() createProgramDto: CreateProgramDto) {
-  //   return this.programService.create(createProgramDto);
-  // }
+  @Post()
+  create(@Body() createProgramDto: CreateProgramDto) {
+    return this.programService.create(createProgramDto);
+  }
 
   @Get()
   findAll() {
