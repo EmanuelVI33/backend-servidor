@@ -29,6 +29,7 @@ export class ElementFactory {
         return await this.musicRepository.save(music);
       case ElementEnum.presenterVideo:
         const presenterVideo = new PresenterVideo(data);
+        console.log(`PresenterVideo: ${presenterVideo}`);
         presenterVideo.programming = data.programming;
         return await this.presenterVideoRepository.save(presenterVideo);
       case ElementEnum.video:

@@ -19,6 +19,7 @@ export class ElementController {
   @Post()
   create(@Body() createElementDto: any) {
     try {
+      console.log(JSON.stringify(createElementDto));
       const createdElement = this.elementService.create(createElementDto);
       return {
         message: 'Element created successfully',

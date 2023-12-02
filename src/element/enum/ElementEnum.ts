@@ -1,6 +1,6 @@
 export enum ElementEnum {
-  video = 'video',
-  imagen = 'imagen',
-  music = 'music',
-  presenterVideo = 'presenterVideo',
+  video = 'Video',
+  imagen = 'Imagen',
+  music = 'Music',
+  presenterVideo = 'PresenterVideo',
 }

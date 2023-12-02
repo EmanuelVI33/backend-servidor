@@ -21,6 +21,9 @@ export class ElementService {
     try {
       const programmingId = elementData.programmingId;
       const programming = await this.programmingService.findOne(programmingId);
+
+      console.log(`Programacción ${programming.title}`);
+
       return await this.elementFactory.createElement({
         ...elementData,
         programming,

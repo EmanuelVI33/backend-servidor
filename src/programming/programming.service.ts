@@ -41,7 +41,12 @@ export class ProgrammingService {
         where: { id },
       });
 
-      return programming.elements;
+      const elementsWithTypes = programming.elements.map((element) => {
+        const elementType = element.constructor.name; // Obtiene el nombre de la clase como el tipo
+        return { ...element, type: elementType };
+      });
+
+      return elementsWithTypes;
     } catch (error) {
       throw new BadRequestException(`Error: ${error}`);
     }
