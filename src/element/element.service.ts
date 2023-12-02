@@ -25,7 +25,6 @@ export class ElementService {
         ...elementData,
         programming,
       });
-      return '';
     } catch (error) {
       throw new BadRequestException(`Error creating element: ${error}`);
     }

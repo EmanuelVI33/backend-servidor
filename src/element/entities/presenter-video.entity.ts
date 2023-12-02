@@ -1,8 +1,8 @@
-import { Column, Entity } from 'typeorm';
+import { ChildEntity, Column } from 'typeorm';
 import { Element } from './';
 import { ElementOptions } from '../interfaces/ElementOption';
 
-@Entity()
+@ChildEntity()
 export class PresenterVideo extends Element {
   @Column()
   title: string;
@@ -20,8 +20,6 @@ export class PresenterVideo extends Element {
     },
   ) {
     super(options);
-    const j = JSON.stringify(options);
-    console.log(`Desde contructor PresenterVideo ${j}`);
     this.title = options.title;
     this.content = options.content;
   }

@@ -1,8 +1,8 @@
-import { Column, Entity } from 'typeorm';
+import { ChildEntity, Column } from 'typeorm';
 import { Element } from './';
 import { ElementOptions } from '../interfaces/ElementOption';
 
-@Entity()
+@ChildEntity()
 export class Imagen extends Element {
   @Column()
   duration: number;

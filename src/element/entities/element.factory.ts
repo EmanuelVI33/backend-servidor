@@ -17,7 +17,6 @@ export class ElementFactory {
     @InjectRepository(Music)
     private readonly musicRepository: Repository<Music>,
   ) {}
-
   async createElement(data: ElementOptions): Promise<Element> {
     switch (data.type) {
       case ElementEnum.imagen:
