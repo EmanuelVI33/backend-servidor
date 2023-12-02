@@ -8,13 +8,13 @@ import { ElementModule } from './element/element.module';
 
 @Module({
   imports: [
-    ProgramModule,
     TypeOrmModule.forRoot({
       type: 'sqlite',
       database: 'programa.sqlite', // Nombre del archivo de la base de datos
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true, // Esto crea automáticamente las tablas al iniciar la aplicación (solo para desarrollo)
     }),
+    ProgramModule,
     ProgrammingModule,
     ElementModule,
   ],

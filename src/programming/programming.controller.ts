@@ -3,13 +3,13 @@ import {
   Get,
   Post,
   Body,
-  Patch,
+  // Patch,
   Param,
   Delete,
 } from '@nestjs/common';
 import { ProgrammingService } from './programming.service';
 import { CreateProgrammingDto } from './dto/create-programming.dto';
-import { UpdateProgrammingDto } from './dto/update-programming.dto';
+// import { UpdateProgrammingDto } from './dto/update-programming.dto';
 
 @Controller('programming')
 export class ProgrammingController {
@@ -30,13 +30,19 @@ export class ProgrammingController {
     return this.programmingService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateProgrammingDto: UpdateProgrammingDto,
-  ) {
-    return this.programmingService.update(+id, updateProgrammingDto);
+  @Get(':id/elements')
+  getProgrammingElements(@Param('id') id: string): any {
+    const programmingId = parseInt(id, 10);
+    return this.programmingService.getElements(programmingId);
   }
+
+  // @Patch(':id')
+  // update(
+  //   @Param('id') id: string,
+  //   @Body() updateProgrammingDto: UpdateProgrammingDto,
+  // ) {
+  //   return this.programmingService.update(+id, updateProgrammingDto);
+  // }
 
   @Delete(':id')
   remove(@Param('id') id: string) {

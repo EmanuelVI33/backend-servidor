@@ -1,5 +1,5 @@
 import { Column, Entity } from 'typeorm';
-import { Element } from './element.entity';
+import { Element } from './';
 import { ElementOptions } from '../interfaces/ElementOption';
 
 @Entity()

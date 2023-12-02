@@ -1,63 +1,68 @@
-import { Injectable } from '@nestjs/common';
-import { UpdateElementDto } from './dto/update-element.dto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+// import { UpdateElementDto } from './dto/update-element.dto';
 import { Element } from './entities/element.entity';
-import { Programming } from 'src/programming/entities/programming.entity';
 import { ElementFactory } from './entities/element.factory';
+import { ProgrammingService } from 'src/programming/programming.service';
+import { DataSource } from 'typeorm';
 
 @Injectable()
 export class ElementService {
   constructor(
-    @InjectRepository(Element)
-    private readonly elementRepository: Repository<Element>,
-    @InjectRepository(Programming)
-    private readonly programmingRepository: Repository<Programming>,
     private readonly elementFactory: ElementFactory,
+    private readonly programmingService: ProgrammingService,
+    private dataSource: DataSource,
   ) {}
 
-  async create(data: any) {
-    const j = JSON.stringify(data);
-    console.log(`Mostrar Data ${j}`);
-    const newElement = await this.elementFactory.createElement(data);
-
-    const programming = await this.programmingRepository.findOneBy({
-      id: data.programmingId,
-    });
-
-    console.log(`Resultado de la fabríca ${+newElement.id}`);
-
-    if (programming) {
-      if (!programming.elements) {
-        programming.elements = [];
-      }
-      // programming.elements.push(newElement.id);
-      await this.programmingRepository.save(programming);
+  async create(elementData: any) {
+    try {
+      const programmingId = elementData.programmingId;
+      const programming = await this.programmingService.findOne(programmingId);
+      return await this.elementFactory.createElement({
+        ...elementData,
+        programming,
+      });
+      return '';
+    } catch (error) {
+      throw new BadRequestException(`Error creating element: ${error}`);
     }
+  }
 
-    return newElement;
+  async getElements(programmingId: number): Promise<Element[]> {
+    try {
+      const elements = await this.dataSource
+        .getRepository(Element)
+        .createQueryBuilder('element')
+        .leftJoinAndSelect('element.programming', 'programming')
+        .where('programming.id = :programmingId', { programmingId })
+        .getMany();
+
+      if (!elements || elements.length === 0) {
+        throw new NotFoundException(
+          `No elements found for programming with id ${programmingId}`,
+        );
+      }
+
+      return elements;
+    } catch (error) {
+      throw new BadRequestException(`Error: ${error}`);
+    }
   }
 
   async findAll() {
     return '';
   }
 
-  private mapToDto(element: Element) {
-    return {
-      id: element.id,
-      path: element.path,
-      index: element.index,
-      // programmingId: element.programming.id, // Asegúrate de ajustar esto según tu relación real
-    };
-  }
-
   findOne(id: number) {
     return `This action returns a #${id} element`;
   }
 
-  update(id: number, updateElementDto: UpdateElementDto) {
-    return `This action updates a #${id} element`;
-  }
+  // update(id: number, updateElementDto: UpdateElementDto) {
+  //   return `This action updates a #${id} element`;
+  // }
 
   remove(id: number) {
     return `This action removes a #${id} element`;

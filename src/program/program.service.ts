@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProgramDto } from './dto/create-program.dto';
-import { UpdateProgramDto } from './dto/update-program.dto';
+// import { UpdateProgramDto } from './dto/update-program.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Program } from './entities/program.entity';
 import { Repository } from 'typeorm';
@@ -23,36 +23,24 @@ export class ProgramService {
 
   async findOne(id: number) {
     const program = await this.programRepository.findOneBy({ id });
+    if (!program) throw new NotFoundException('Programa no encontrado');
 
-    if (!program) {
-      // Manejo de error si el programa no existe
-      throw new Error('Programa no encontrado');
-    }
-
-    return program.programming;
+    return program;
   }
 
-  update(id: number, updateProgramDto: UpdateProgramDto) {
-    return `This action updates a #${id} program`;
-  }
+  // update(id: number, updateProgramDto: UpdateProgramDto) {
+  //   return `This action updates a #${id} program`;
+  // }
 
   remove(id: number) {
     return `This action removes a #${id} program`;
   }
 
-  async getProgrammingsByProgramId(programId: number) {
+  async getProgrammingsByProgramId(id: number) {
     const program = await this.programRepository.findOne({
-      relations: {
-        programming: true,
-      },
-      where: {
-        id: programId,
-      },
+      relations: { programming: true },
+      where: { id },
     });
-
-    if (!program) {
-      throw new NotFoundException('Program not found');
-    }
 
     return program.programming;
   }

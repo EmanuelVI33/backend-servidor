@@ -3,14 +3,14 @@ import {
   Get,
   // Post,
   Body,
-  Patch,
+  // Patch,
   Param,
   Delete,
   Post,
 } from '@nestjs/common';
 import { ProgramService } from './program.service';
 // import { CreateProgramDto } from './dto/create-program.dto';
-import { UpdateProgramDto } from './dto/update-program.dto';
+// import { UpdateProgramDto } from './dto/update-program.dto';
 import { CreateProgramDto } from './dto/create-program.dto';
 
 @Controller('program')
@@ -32,10 +32,10 @@ export class ProgramController {
     return this.programService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateProgramDto: UpdateProgramDto) {
-    return this.programService.update(+id, updateProgramDto);
-  }
+  // @Patch(':id')
+  // update(@Param('id') id: string, @Body() updateProgramDto: UpdateProgramDto) {
+  //   return this.programService.update(+id, updateProgramDto);
+  // }
 
   @Delete(':id')
   remove(@Param('id') id: string) {

@@ -22,16 +22,19 @@ export class ElementFactory {
     switch (data.type) {
       case ElementEnum.imagen:
         const imagen = new Imagen(data);
+        imagen.programming = data.programming;
         return await this.imagenRepository.save(imagen);
       case ElementEnum.music:
         const music = new Music(data);
+        music.programming = data.programming;
         return await this.musicRepository.save(music);
       case ElementEnum.presenterVideo:
-        console.log('Ingreso a presenter');
         const presenterVideo = new PresenterVideo(data);
+        presenterVideo.programming = data.programming;
         return await this.presenterVideoRepository.save(presenterVideo);
       case ElementEnum.video:
         const video = new Video(data);
+        video.programming = data.programming;
         return await this.videoRepository.save(video);
       default:
         throw new Error('Invalid element type');

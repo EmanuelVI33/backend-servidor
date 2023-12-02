@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Element, Video, Imagen, Music, PresenterVideo } from './entities';
 import { Programming } from 'src/programming/entities/programming.entity';
 import { ElementFactory } from './entities/element.factory';
+import { ProgrammingModule } from 'src/programming/programming.module';
 
 @Module({
   imports: [
@@ -16,8 +17,9 @@ import { ElementFactory } from './entities/element.factory';
       PresenterVideo,
       Programming,
     ]),
+    ProgrammingModule,
   ],
-  exports: [TypeOrmModule.forFeature([Element])],
+  exports: [ElementService],
   controllers: [ElementController],
   providers: [ElementService, ElementFactory],
 })
