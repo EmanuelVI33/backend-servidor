@@ -6,8 +6,11 @@ import {
   // Patch,
   Param,
   Delete,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 import { ElementService } from './element.service';
+import { FileInterceptor } from '@nestjs/platform-express';
 // import { CreateElementDto } from './dto/create-element.dto';
 // import { UpdateElementDto } from './dto/update-element.dto';
 // import { ProgrammingService } from 'src/programming/programming.service';
@@ -17,10 +20,13 @@ export class ElementController {
   constructor(private readonly elementService: ElementService) {}
 
   @Post()
-  create(@Body() createElementDto: any) {
+  @UseInterceptors(FileInterceptor('file'))
+  create(@Body() createElementDto: any, @UploadedFile() file: any) {
     try {
-      console.log(JSON.stringify(createElementDto));
-      const createdElement = this.elementService.create(createElementDto);
+      const createdElement = this.elementService.create({
+        ...createElementDto,
+        file,
+      });
       return {
         message: 'Element created successfully',
         element: createdElement,
@@ -28,6 +34,12 @@ export class ElementController {
     } catch (error) {
       return { error: error.message || 'Internal Server Error' };
     }
+  }
+
+  @Post()
+  generateElement(@Body() createElementDto: any) {
+    try {
+    } catch (error) {}
   }
 
   @Get()

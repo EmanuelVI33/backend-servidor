@@ -20,6 +20,9 @@ export abstract class Element {
   @Column()
   index: number;
 
+  @Column({ nullable: true })
+  file?: string;
+
   // Un elemento pertenece a una programación
   @ManyToOne(() => Programming, (programming) => programming.elements)
   programming: Programming;

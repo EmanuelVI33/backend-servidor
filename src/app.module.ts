@@ -5,6 +5,8 @@ import { ProgramModule } from './program/program.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProgrammingModule } from './programming/programming.module';
 import { ElementModule } from './element/element.module';
+import { MulterModule } from '@nestjs/platform-express';
+import { multerOptions } from './config/multer-options';
 
 @Module({
   imports: [
@@ -14,6 +16,7 @@ import { ElementModule } from './element/element.module';
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true, // Esto crea automáticamente las tablas al iniciar la aplicación (solo para desarrollo)
     }),
+    MulterModule.register(multerOptions),
     ProgramModule,
     ProgrammingModule,
     ElementModule,
