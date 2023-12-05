@@ -12,6 +12,7 @@ import {
 import { ElementService } from './element.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 // import { CreateElementDto } from './dto/create-element.dto';
+import { ElementsTriggerDto } from './dto/element-trigger';
 // import { UpdateElementDto } from './dto/update-element.dto';
 // import { ProgrammingService } from 'src/programming/programming.service';
 
@@ -36,10 +37,19 @@ export class ElementController {
     }
   }
 
-  @Post()
-  generateElement(@Body() createElementDto: any) {
+  @Post('trigger')
+  generateElement(@Body() elementTriggerDto: ElementsTriggerDto) {
     try {
-    } catch (error) {}
+      // console.log(elementTriggerDto);
+      this.elementService.generateElement(elementTriggerDto);
+    } catch (error) {
+      return { error: error.message || 'Internal Server Error' };
+    }
+  }
+
+  @Get('created')
+  createVideo(@Body() response: any) {
+    console.log(response);
   }
 
   @Get()

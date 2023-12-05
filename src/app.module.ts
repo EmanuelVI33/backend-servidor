@@ -7,9 +7,11 @@ import { ProgrammingModule } from './programming/programming.module';
 import { ElementModule } from './element/element.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { multerOptions } from './config/multer-options';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({ envFilePath: '.env', isGlobal: true }),
     TypeOrmModule.forRoot({
       type: 'sqlite',
       database: 'programa.sqlite', // Nombre del archivo de la base de datos

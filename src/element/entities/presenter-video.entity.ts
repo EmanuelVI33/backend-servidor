@@ -10,6 +10,9 @@ export class PresenterVideo extends Element {
   @Column()
   content: string;
 
+  @Column('int', { nullable: true })
+  idTalk?: number;
+
   constructor(
     options: ElementOptions = {
       type: '',
@@ -22,5 +25,6 @@ export class PresenterVideo extends Element {
     super(options);
     this.title = options.title;
     this.content = options.content;
+    this.idTalk = this.idTalk;
   }
 }

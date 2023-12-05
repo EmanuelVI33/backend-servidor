@@ -40,4 +40,19 @@ export class ElementFactory {
         throw new Error('Invalid element type');
     }
   }
+
+  createElementObject(data: any): Element {
+    switch (data.type) {
+      case ElementEnum.imagen:
+        return new Imagen(data);
+      case ElementEnum.music:
+        return new Music(data);
+      case ElementEnum.presenterVideo:
+        return new PresenterVideo(data);
+      case ElementEnum.video:
+        return new Video(data);
+      default:
+        throw new Error('Invalid element type');
+    }
+  }
 }

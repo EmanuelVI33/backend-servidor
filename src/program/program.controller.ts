@@ -24,6 +24,7 @@ export class ProgramController {
 
   @Get()
   findAll() {
+    console.log('Holaaa');
     return this.programService.findAll();
   }
 

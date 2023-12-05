@@ -22,6 +22,9 @@ export class Programming {
   @Column({ type: 'time' })
   startTime: string;
 
+  @Column({ nullable: true })
+  description?: string;
+
   @ManyToOne(() => Program, (program: Program) => program.programming)
   program: Program;
 
