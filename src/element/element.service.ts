@@ -12,9 +12,10 @@ import { DataSource, Repository } from 'typeorm';
 import { DIdService } from './service/d-id.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ElementsTriggerDto } from './dto/element-trigger';
-import { ElementEnum } from './enum/ElementEnum';
-import { isInstance } from 'class-validator';
 import { PresenterVideo } from './entities';
+import { FileService } from './service/file.service';
+import * as pathFile from 'path';
+import { ElementEnum } from './enum/ElementEnum';
 
 @Injectable()
 export class ElementService {
@@ -54,19 +55,36 @@ export class ElementService {
       .andWhere('element.index IN (:...elementsIndex)', { elementsIndex }) // Que el indice este dentro del arrray
       .getMany();
 
+    // Aumentar type a element
     const elementsWithTypes = elements.map((element) => {
+      console.log(`Elemento ${element.id}`);
       const type = element.constructor.name;
       const elementType = this.elementFactory.createElementObject({
+        id: element.id,
         ...element,
         type,
       });
-      console.log(elementType.id);
       return elementType;
     });
 
-    elementsWithTypes.map((element) => {
+    elementsWithTypes.map(async (element: Element) => {
+      const type = element.constructor.name;
       if (element instanceof PresenterVideo) {
-        this.generateVideo(element);
+        const idTalk = await this.dIdService.generateVideo(element.content);
+
+        // Devuelve el path donde se almaceno
+        const path = await this.getVideoDone(idTalk);
+
+        console.log(element);
+
+        // La fabría actualiza el element
+        await this.elementFactory.createElement({
+          id: element.id,
+          ...element,
+          type,
+          idTalk,
+          path,
+        });
       } else {
         console.log(`Otro: ${element}`);
       }
@@ -75,19 +93,44 @@ export class ElementService {
     return { ok: true };
   }
 
-  async generateVideo(element: PresenterVideo) {
-    // const presenterVideo = await this.elementRepository.findOneBy({
-    //   id,
+  async getVideoDone(idTalk: string) {
+    let aux;
+    while (true) {
+      this.esperar(1000);
+      const { data } = await this.dIdService.getVideo(idTalk);
+      aux = data;
+      if (data.status === 'done') break;
+    }
+
+    // Obtén la ruta del directorio actual del archivo actual
+    const { result_url: videoUrl } = aux;
+    const currentDirectory = __dirname;
+
+    // Construye la ruta a la carpeta public/videos en la raíz del proyecto
+    const destinationPath = pathFile.join(
+      currentDirectory,
+      '../..',
+      'public',
+      'videos',
+      `${idTalk}.mp4`,
+    );
+
+    FileService.downloadAndSaveVideo(videoUrl, destinationPath);
+
+    const path = `public/videos/${idTalk}.mp4`;
+
+    return path;
+
+    // await this.elementFactory.createElement({
+    //   id: element.id,
+    //   ...element,
+    //   idTalk,
+    //   path: `public/videos/${idTalk}.mp4`,
     // });
+  }
 
-    const idTalk = await this.dIdService.generateVideo(element.content);
-
-    this.elementRepository.save({
-      ...element,
-      idTalk,
-    });
-
-    return idTalk;
+  esperar(ms: number) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   async getElements(programmingId: number): Promise<Element[]> {

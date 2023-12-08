@@ -28,6 +28,21 @@ export class ElementFactory {
         music.programming = data.programming;
         return await this.musicRepository.save(music);
       case ElementEnum.presenterVideo:
+        // const existingPresenterVideo =
+        //   data.id && (await this.presenterVideoRepository.findOne(data.id));
+        // if (existingPresenterVideo) {
+        //   // Si el elemento ya existe, actualiza sus propiedades
+        //   this.presenterVideoRepository.merge(existingPresenterVideo, data);
+        //   return await this.presenterVideoRepository.save(
+        //     existingPresenterVideo,
+        //   );
+        // } else {
+        //   // Si el elemento no existe, crea uno nuevo
+        //   const presenterVideo = new PresenterVideo(data);
+        //   presenterVideo.programming = data.programming;
+        //   return await this.presenterVideoRepository.save(presenterVideo);
+        // }
+
         const presenterVideo = new PresenterVideo(data);
         console.log(`PresenterVideo: ${presenterVideo}`);
         presenterVideo.programming = data.programming;
@@ -48,6 +63,7 @@ export class ElementFactory {
       case ElementEnum.music:
         return new Music(data);
       case ElementEnum.presenterVideo:
+        console.log(`Dataaa ${data.id}`);
         return new PresenterVideo(data);
       case ElementEnum.video:
         return new Video(data);

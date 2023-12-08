@@ -34,6 +34,7 @@ export abstract class Element {
       programming: null,
     },
   ) {
+    this.id = options.id;
     this.path = options.path;
     this.index = options.index;
     this.programming = options.programming;

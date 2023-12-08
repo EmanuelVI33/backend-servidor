@@ -40,7 +40,7 @@ export class ElementController {
   @Post('trigger')
   generateElement(@Body() elementTriggerDto: ElementsTriggerDto) {
     try {
-      // console.log(elementTriggerDto);
+      console.log(elementTriggerDto);
       this.elementService.generateElement(elementTriggerDto);
     } catch (error) {
       return { error: error.message || 'Internal Server Error' };
