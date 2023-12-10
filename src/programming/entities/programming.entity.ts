@@ -1,12 +1,6 @@
 import { Element } from 'src/element/entities';
 import { Program } from 'src/program/entities/program.entity';
-import {
-  Column,
-  Entity,
-  ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, OneToMany, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Programming {
@@ -17,15 +11,19 @@ export class Programming {
   title: string;
 
   @Column()
-  turn: number;
+  duration: string;
 
-  @Column({ type: 'time' })
+  @Column()
   startTime: string;
 
   @Column({ nullable: true })
   description?: string;
 
-  @ManyToOne(() => Program, (program: Program) => program.programming)
+  @Column()
+  host:number;
+
+  @ManyToOne(() => Program, (program: Program) => program.programming,{onDelete: 'CASCADE'})
+  
   program: Program;
 
   @OneToMany(() => Element, (element) => element.programming)

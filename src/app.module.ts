@@ -1,6 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { ProgramModule } from './program/program.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProgrammingModule } from './programming/programming.module';
@@ -8,10 +6,17 @@ import { ElementModule } from './element/element.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { multerOptions } from './config/multer-options';
 import { ConfigModule } from '@nestjs/config';
+import { join } from 'path';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { HostModule } from './host/host.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ envFilePath: '.env', isGlobal: true }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'uploads'),
+    }),
+    
     TypeOrmModule.forRoot({
       type: 'sqlite',
       database: 'programa.sqlite', // Nombre del archivo de la base de datos
@@ -22,8 +27,10 @@ import { ConfigModule } from '@nestjs/config';
     ProgramModule,
     ProgrammingModule,
     ElementModule,
+    ProgramModule,
+    HostModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}

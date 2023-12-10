@@ -1,9 +1,15 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateProgramDto } from './dto/create-program.dto';
-// import { UpdateProgramDto } from './dto/update-program.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Program } from './entities/program.entity';
 import { Repository } from 'typeorm';
+import * as fs from 'fs';
+import * as path from 'path';
+import { promisify } from 'util';
+
+import { CreateProgramDto } from './dto/create-program.dto';
+import { UpdateProgramDto } from './dto/update-program.dto';
+import { Program } from './entities/program.entity';
+
+const unlinkAsync = promisify(fs.unlink);
 
 @Injectable()
 export class ProgramService {
@@ -17,8 +23,19 @@ export class ProgramService {
     return await this.programRepository.save(program);
   }
 
-  findAll() {
-    return this.programRepository.find();
+  async findAll() {
+    
+    const programs = await this.programRepository.query(`
+      SELECT program.*, host.photoUrl
+      FROM program
+      INNER JOIN host ON program.host = host.id
+    `);
+    
+    const baseUrl = 'http://localhost:3010/cover/'
+    return programs.map(p => ({
+      ...p,
+      coverUrl:`${baseUrl}${p.cover}`,
+    }));
   }
 
   async findOne(id: number) {
@@ -28,27 +45,49 @@ export class ProgramService {
     return program;
   }
 
-  // update(id: number, updateProgramDto: UpdateProgramDto) {
-  //   return `This action updates a #${id} program`;
-  // }
+  async update(id: number, updateProgramDto: UpdateProgramDto) {
+   
+    const program = await this.programRepository.findOneBy({id});
+    
+    if (!program) {
+      throw new NotFoundException(`Program with ID ${id} not found`);
+    }
 
-  remove(id: number) {
-    return `This action removes a #${id} program`;
+    this.programRepository.merge(program,updateProgramDto);
+    
+    return await this.programRepository.save(program);
   }
 
-  async getProgrammingsByProgramId(id: number) {
-    const program = await this.programRepository.findOne({
-      relations: { programming: { elements: true } },
-      where: { id },
-    });
+  async remove(id: number) {
+    const programToRemove = await this.programRepository.findOneBy({id});
+    if (!programToRemove) {
+      throw new Error('Program not found');
+    }
+    const filePath = path.join(__dirname, '..', '..','uploads', 'cover', programToRemove.cover);
+    // console.log(filePath);
+    // await unlinkAsync(`../../uploads/cover/${programToRemove.cover}`);
+    const result = await this.programRepository.remove(programToRemove);
+    await unlinkAsync(filePath);
 
-    const programming = program.programming.map((p) => {
-      return {
-        ...p,
-        elements: p.elements.map((element) => element.path),
-      };
-    });
+    return result;
+  }
+    
 
-    return programming;
+
+  async getProgrammingsByProgramId(programId: number) {
+    let programmingList = [];
+    try{
+      programmingList = await this.programRepository.query(`
+      SELECT pmm.*, host.photoUrl
+      FROM program p
+      INNER JOIN programming pmm ON p.id = pmm.programId
+      INNER JOIN host ON pmm.host = host.id
+      WHERE pmm.programId = ${programId}
+    `);
+    // console.log(programmingList);
+    }catch(error){
+      console.log(error);
+    }
+    return programmingList;
   }
 }

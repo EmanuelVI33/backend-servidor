@@ -4,6 +4,15 @@ export class CreateProgramDto {
   @IsString()
   name: string;
 
+  @IsString()
+  duration: string;
+
+  @IsString()
+  cover:string;
+
+  @IsString()
+  description:string;
+
   @IsNumber()
-  duration: number;
+  host:number;
 }

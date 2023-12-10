@@ -23,7 +23,7 @@ export class ProgrammingController {
   @Get()
   findAll(@Body() body: { programId: number }) {
     console.log(`ProgramId: ${body.programId}`);
-    return this.programmingService.findAll(body.programId);
+    return this.programmingService.findAll();
   }
 
   @Get(':id')
@@ -57,6 +57,7 @@ export class ProgrammingController {
 
   @Delete(':id')
   remove(@Param('id') id: string) {
+    // console.log('programming.. ' + id);
     return this.programmingService.remove(+id);
   }
 }
