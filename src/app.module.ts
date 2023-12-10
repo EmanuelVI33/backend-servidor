@@ -1,14 +1,18 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { ProgramModule } from './program/program.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProgrammingModule } from './programming/programming.module';
 import { ElementModule } from './element/element.module';
+import { join } from 'path';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { HostModule } from './host/host.module';
 
 @Module({
   imports: [
-    ProgramModule,
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'uploads'),
+    }),
+    
     TypeOrmModule.forRoot({
       type: 'sqlite',
       database: 'programa.sqlite', // Nombre del archivo de la base de datos
@@ -17,8 +21,10 @@ import { ElementModule } from './element/element.module';
     }),
     ProgrammingModule,
     ElementModule,
+    ProgramModule,
+    HostModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}

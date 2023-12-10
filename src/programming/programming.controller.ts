@@ -40,6 +40,7 @@ export class ProgrammingController {
 
   @Delete(':id')
   remove(@Param('id') id: string) {
+    // console.log('programming.. ' + id);
     return this.programmingService.remove(+id);
   }
 }

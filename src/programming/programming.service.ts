@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProgrammingDto } from './dto/create-programming.dto';
 import { UpdateProgrammingDto } from './dto/update-programming.dto';
 import { Programming } from './entities/programming.entity';
@@ -41,18 +41,43 @@ export class ProgrammingService {
   }
 
   async findAll(): Promise<Programming[]> {
-    return this.programmingRepository.find();
+    let programmingList = [];
+    try{
+      programmingList = await this.programmingRepository.query(`
+      SELECT p.*, host.photoUrl
+      FROM programming p
+      INNER JOIN host ON p.host = host.id
+    `);
+    // console.log(programmingList);
+    }catch(error){
+      console.log(error);
+    }
+    return programmingList;
   }
 
   findOne(id: number) {
     return `This action returns a #${id} programming`;
   }
 
-  update(id: number, updateProgrammingDto: UpdateProgrammingDto) {
-    return `This action updates a #${id} programming`;
+  async update(id: number, updateProgrammingDto: UpdateProgrammingDto) {
+    const programming = await this.programmingRepository.findOneBy({id});
+    
+    if (!programming) {
+      throw new NotFoundException(`Programming with ID ${id} not found`);
+    }
+
+    this.programmingRepository.merge(programming,updateProgrammingDto);
+    
+    return await this.programmingRepository.save(programming);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} programming`;
+  async remove(id: number) {
+    console.log(id);
+    const pmm = await this.programmingRepository.findOneBy({id});
+    if (!pmm) {
+      throw new Error('Programming not found');
+    }
+    
+    return await this.programmingRepository.remove(pmm);
   }
 }

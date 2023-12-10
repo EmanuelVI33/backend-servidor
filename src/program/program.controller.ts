@@ -1,24 +1,44 @@
+import { FileInterceptor } from '@nestjs/platform-express';
 import {
   Controller,
   Get,
-  // Post,
   Body,
   Patch,
   Param,
   Delete,
   Post,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
+import { diskStorage } from 'multer';
+import { extname } from 'path';
+
 import { ProgramService } from './program.service';
-// import { CreateProgramDto } from './dto/create-program.dto';
 import { UpdateProgramDto } from './dto/update-program.dto';
-import { CreateProgramDto } from './dto/create-program.dto';
 
 @Controller('program')
 export class ProgramController {
   constructor(private readonly programService: ProgramService) {}
 
   @Post()
-  create(@Body() createProgramDto: CreateProgramDto) {
+  @UseInterceptors(FileInterceptor('cover',{
+    storage:diskStorage({
+      destination:'./uploads/cover',
+      filename: (req, file, cb) => {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+        const extension = extname(file.originalname);
+        const filename = `${uniqueSuffix}${extension}`;
+        cb(null, filename);
+      },
+    })
+  }))
+  create(@UploadedFile() file, @Body('data') data: string) {
+    // console.log(file);
+    // const updatedPath = `cover/${file.filename}`;
+    const createProgramDto = JSON.parse(data);
+    createProgramDto.cover = file.filename;
+    console.log(createProgramDto);
+    
     return this.programService.create(createProgramDto);
   }
 
