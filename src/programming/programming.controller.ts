@@ -21,8 +21,9 @@ export class ProgrammingController {
   }
 
   @Get()
-  findAll() {
-    return this.programmingService.findAll();
+  findAll(@Body() body: { programId: number }) {
+    console.log(`ProgramId: ${body.programId}`);
+    return this.programmingService.findAll(body.programId);
   }
 
   @Get(':id')
@@ -34,6 +35,16 @@ export class ProgrammingController {
   getProgrammingElements(@Param('id') id: string): any {
     const programmingId = parseInt(id, 10);
     return this.programmingService.getElements(programmingId);
+  }
+
+  @Get(':id/play')
+  findAllWithElement(@Param('id') id: string) {
+    try {
+      console.log(`Ingresooo  ${id}`);
+      return this.programmingService.getAllProgrammingByProgram();
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   // @Patch(':id')

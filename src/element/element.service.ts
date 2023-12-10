@@ -15,7 +15,6 @@ import { ElementsTriggerDto } from './dto/element-trigger';
 import { PresenterVideo } from './entities';
 import { FileService } from './service/file.service';
 import * as pathFile from 'path';
-import { ElementEnum } from './enum/ElementEnum';
 
 @Injectable()
 export class ElementService {
@@ -120,13 +119,6 @@ export class ElementService {
     const path = `public/videos/${idTalk}.mp4`;
 
     return path;
-
-    // await this.elementFactory.createElement({
-    //   id: element.id,
-    //   ...element,
-    //   idTalk,
-    //   path: `public/videos/${idTalk}.mp4`,
-    // });
   }
 
   esperar(ms: number) {
@@ -154,6 +146,25 @@ export class ElementService {
       throw new BadRequestException(`Error: ${error}`);
     }
   }
+
+  // /**
+  //  *
+  //  * @param programmingId
+  //  * @returns Lista de referencia a los elementos
+  //  */
+  // async getElementsPath(programmingId: number) {
+  //   try {
+  //     const elements = await this.dataSource
+  //       .getRepository(Element)
+  //       .createQueryBuilder('element')
+  //       .leftJoinAndSelect('element.programming', 'programming')
+  //       .select('path')
+  //       .where('programming.id = :programmingId', { programmingId })
+  //       .getMany();
+
+  //     return elements;
+  //   } catch (error) {}
+  // }
 
   async findAll() {
     return '';

@@ -38,10 +38,17 @@ export class ProgramService {
 
   async getProgrammingsByProgramId(id: number) {
     const program = await this.programRepository.findOne({
-      relations: { programming: true },
+      relations: { programming: { elements: true } },
       where: { id },
     });
 
-    return program.programming;
+    const programming = program.programming.map((p) => {
+      return {
+        ...p,
+        elements: p.elements.map((element) => element.path),
+      };
+    });
+
+    return programming;
   }
 }
