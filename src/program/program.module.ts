@@ -7,7 +7,7 @@ import { Programming } from '../programming/entities/programming.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Program, Programming])],
-  exports: [TypeOrmModule],
+  exports: [TypeOrmModule,ProgramService],
   controllers: [ProgramController],
   providers: [ProgramService],
 })

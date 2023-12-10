@@ -1,6 +1,15 @@
-import { Column, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  TableInheritance,
+} from 'typeorm';
+import { Programming } from 'src/programming/entities/programming.entity';
 import { ElementOptions } from '../interfaces/ElementOption';
 
+@Entity('element')
+@TableInheritance({ column: { type: 'varchar', name: 'type' } })
 export abstract class Element {
   @PrimaryGeneratedColumn()
   id: number;
@@ -11,29 +20,23 @@ export abstract class Element {
   @Column()
   index: number;
 
-  @Column()
-  type: string;
+  @Column({ nullable: true })
+  file?: string;
 
   // Un elemento pertenece a una programación
-  // @ManyToOne(
-  //   () => Programming,
-  //   (programming: Programming) => programming.elements,
-  // )
-  // @Column()
-  // programming: Programming;
+  @ManyToOne(() => Programming, (programming) => programming.elements)
+  programming: Programming;
 
   constructor(
     options: ElementOptions = {
-      type: '',
       path: '',
       index: 0,
-      // programming: null,
+      programming: null,
     },
   ) {
-    console.log(`Desde contructor Element ${options}`);
-    this.type = options.type;
+    this.id = options.id;
     this.path = options.path;
     this.index = options.index;
-    // this.programming = options.programming;
+    this.programming = options.programming;
   }
 }

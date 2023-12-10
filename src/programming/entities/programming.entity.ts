@@ -1,5 +1,6 @@
+import { Element } from 'src/element/entities';
 import { Program } from 'src/program/entities/program.entity';
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Programming {
@@ -15,8 +16,8 @@ export class Programming {
   @Column()
   startTime: string;
 
-  @Column()
-  description:string;
+  @Column({ nullable: true })
+  description?: string;
 
   @Column()
   host:number;
@@ -25,6 +26,6 @@ export class Programming {
   
   program: Program;
 
-  @Column('int', { array: true, nullable: true })
-  elements: number[] = [];
+  @OneToMany(() => Element, (element) => element.programming)
+  elements: Element[];
 }

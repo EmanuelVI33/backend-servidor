@@ -40,13 +40,9 @@ export class ProgramService {
 
   async findOne(id: number) {
     const program = await this.programRepository.findOneBy({ id });
+    if (!program) throw new NotFoundException('Programa no encontrado');
 
-    if (!program) {
-      // Manejo de error si el programa no existe
-      throw new Error('Programa no encontrado');
-    }
-
-    return program.programming;
+    return program;
   }
 
   async update(id: number, updateProgramDto: UpdateProgramDto) {

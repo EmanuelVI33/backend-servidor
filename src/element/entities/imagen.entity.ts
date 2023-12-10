@@ -1,8 +1,8 @@
-import { Column, Entity } from 'typeorm';
-import { Element } from './element.entity';
+import { ChildEntity, Column } from 'typeorm';
+import { Element } from './';
 import { ElementOptions } from '../interfaces/ElementOption';
 
-@Entity()
+@ChildEntity()
 export class Imagen extends Element {
   @Column()
   duration: number;
@@ -17,7 +17,6 @@ export class Imagen extends Element {
     },
   ) {
     super(options);
-    console.log(`Desde constructor de Imagen ${options.duration}`);
     this.duration = options.duration;
   }
 }

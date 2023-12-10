@@ -3,7 +3,7 @@ import {
   Controller,
   Get,
   Body,
-  Patch,
+  // Patch,
   Param,
   Delete,
   Post,
@@ -44,6 +44,7 @@ export class ProgramController {
 
   @Get()
   findAll() {
+    // console.log('Holaaa');
     return this.programService.findAll();
   }
 

@@ -1,18 +1,23 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateProgrammingDto } from './dto/create-programming.dto';
-import { UpdateProgrammingDto } from './dto/update-programming.dto';
+// import { UpdateProgrammingDto } from './dto/update-programming.dto';
 import { Programming } from './entities/programming.entity';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Program } from 'src/program/entities/program.entity';
+import { ProgramService } from 'src/program/program.service';
+import { UpdateProgrammingDto } from './dto/update-programming.dto';
 
 @Injectable()
 export class ProgrammingService {
   constructor(
     @InjectRepository(Programming)
     private programmingRepository: Repository<Programming>,
-    @InjectRepository(Program)
-    private programRepository: Repository<Program>,
+    private readonly programService: ProgramService,
+    private dataSource: DataSource,
   ) {}
 
   async create(
@@ -20,14 +25,7 @@ export class ProgrammingService {
   ): Promise<Programming> {
     const { programId, ...programmingData } = createProgrammingDto;
 
-    const program = await this.programRepository.findOneBy({ id: programId });
-
-    console.log(`Programa ${program.id}`);
-
-    if (!program) {
-      // Manejo de error si el programa no existe
-      throw new Error('Programa no encontrado');
-    }
+    const program = await this.programService.findOne(programId);
 
     const programming = this.programmingRepository.create({
       ...programmingData,
@@ -55,8 +53,19 @@ export class ProgrammingService {
     return programmingList;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} programming`;
+  async findOne(id: number) {
+    try {
+      const programming = await this.programmingRepository.findOneBy({
+        id,
+      });
+
+      if (!programming)
+        throw new NotFoundException(`Programming with id ${id} not found`);
+
+      return programming;
+    } catch (error) {
+      throw new BadRequestException(`Error: ${error}`);
+    }
   }
 
   async update(id: number, updateProgrammingDto: UpdateProgrammingDto) {

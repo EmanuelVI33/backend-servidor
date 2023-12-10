@@ -1,8 +1,8 @@
-import { Column, Entity } from 'typeorm';
-import { Element } from './element.entity';
+import { ChildEntity, Column } from 'typeorm';
+import { Element } from './';
 import { ElementOptions } from '../interfaces/ElementOption';
 
-@Entity()
+@ChildEntity()
 export class Video extends Element {
   @Column()
   title: string;
