@@ -38,6 +38,7 @@ export class ProgramController {
   create(@UploadedFile() file, @Body('data') data: string) {
     // console.log(file);
     // const updatedPath = `cover/${file.filename}`;
+    console.log(`data : ${JSON.stringify(data)}`);
     const createProgramDto = JSON.parse(data);
     createProgramDto.cover = file.filename;
     console.log(createProgramDto);

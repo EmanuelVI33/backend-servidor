@@ -31,11 +31,11 @@ export class ProgrammingController {
     return this.programmingService.findOne(+id);
   }
 
-  @Get(':id/elements')
-  getProgrammingElements(@Param('id') id: string): any {
-    const programmingId = parseInt(id, 10);
-    return this.programmingService.getElements(programmingId);
-  }
+  // @Get(':id/elements')
+  // getProgrammingElements(@Param('id') id: string): any {
+  //   const programmingId = parseInt(id, 10);
+  //   return this.programmingService.getElements(programmingId);
+  // }
 
   // @Get(':id/play')
   // findAllWithElement(@Param('id') id: string) {

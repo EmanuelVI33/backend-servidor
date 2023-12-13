@@ -10,10 +10,15 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { S3Client } from '@aws-sdk/client-s3';
 import * as multerS3 from 'multer-s3';
-
 import { HostService } from './host.service';
 
-const s3 = new S3Client();
+const s3 = new S3Client({
+  region: 'us-east-2',
+  credentials: {
+    accessKeyId: process.env.ACCESS_KEY_ID,
+    secretAccessKey: process.env.SECRET_ACCESS_KEY,
+  },
+});
 
 @Controller('host')
 export class HostController {
