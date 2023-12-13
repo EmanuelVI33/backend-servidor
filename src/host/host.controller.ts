@@ -1,16 +1,24 @@
-import { Controller, Get, Post, Body,  Param,UseInterceptors, UploadedFile  } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  UseInterceptors,
+  UploadedFile,
+} from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { S3Client } from '@aws-sdk/client-s3';
 import * as multerS3 from 'multer-s3';
 
 import { HostService } from './host.service';
 
-const s3 = new S3Client()
+const s3 = new S3Client();
 
 @Controller('host')
 export class HostController {
   constructor(private readonly hostService: HostService) {}
-  
+
   @Post()
   @UseInterceptors(
     FileInterceptor('file', {
@@ -18,20 +26,19 @@ export class HostController {
         s3: s3,
         bucket: 'topicos-2023',
         metadata: function (req, file, cb) {
-          cb(null, {fieldName: file.fieldname});
+          cb(null, { fieldName: file.fieldname });
         },
         key: function (req, file, cb) {
-          cb(null, Date.now().toString())
-        }
+          cb(null, Date.now().toString());
+        },
       }),
     }),
   )
-  uploadFile(@UploadedFile() file, @Body('sex') sex:string) {
+  uploadFile(@UploadedFile() file, @Body('sex') sex: string) {
     console.log('File uploaded:', file);
     // return { url: file.location };
-    return this.hostService.create({sex,photoUrl:file.location})
+    return this.hostService.create({ sex, photoUrl: file.location });
   }
-
 
   // @Post()
   // create(@Body() createHostDto: CreateHostDto) {
@@ -47,5 +54,4 @@ export class HostController {
   findOne(@Param('id') id: string) {
     return this.hostService.findOne(+id);
   }
-
 }

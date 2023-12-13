@@ -12,7 +12,7 @@ import { DataSource, Repository } from 'typeorm';
 import { DIdService } from './service/d-id.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ElementsTriggerDto } from './dto/element-trigger';
-import { PresenterVideo } from './entities';
+import { Imagen, PresenterVideo } from './entities';
 import { FileService } from './service/file.service';
 import * as pathFile from 'path';
 
@@ -84,8 +84,8 @@ export class ElementService {
           idTalk,
           path,
         });
-      } else {
-        console.log(`Otro: ${element}`);
+      } else if (element instanceof Imagen) {
+        console.log(`Otro: ${element.duration}`);
       }
     });
 

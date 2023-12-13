@@ -1,8 +1,8 @@
-import { IsIn, IsString } from "class-validator";
+import { IsIn, IsString } from 'class-validator';
 
 export class CreateHostDto {
   @IsString()
-  @IsIn(["M","F"])
+  @IsIn(['M', 'F'])
   sex: string;
 
   @IsString()

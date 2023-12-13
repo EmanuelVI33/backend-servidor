@@ -40,14 +40,14 @@ export class ProgrammingService {
 
   async findAll(): Promise<Programming[]> {
     let programmingList = [];
-    try{
+    try {
       programmingList = await this.programmingRepository.query(`
       SELECT p.*, host.photoUrl
       FROM programming p
       INNER JOIN host ON p.host = host.id
     `);
-    // console.log(programmingList);
-    }catch(error){
+      // console.log(programmingList);
+    } catch (error) {
       console.log(error);
     }
     return programmingList;
@@ -68,25 +68,44 @@ export class ProgrammingService {
     }
   }
 
+  // Obtener todos los elementos de una programación
+  async getElements(id: number) {
+    try {
+      const programming = await this.programmingRepository.findOne({
+        relations: { elements: true },
+        where: { id },
+      });
+
+      const elementsWithTypes = programming.elements.map((element) => {
+        const elementType = element.constructor.name; // Obtiene el nombre de la clase como el tipo
+        return { ...element, type: elementType };
+      });
+
+      return elementsWithTypes;
+    } catch (error) {
+      throw new BadRequestException(`Error: ${error}`);
+    }
+  }
+
   async update(id: number, updateProgrammingDto: UpdateProgrammingDto) {
-    const programming = await this.programmingRepository.findOneBy({id});
-    
+    const programming = await this.programmingRepository.findOneBy({ id });
+
     if (!programming) {
       throw new NotFoundException(`Programming with ID ${id} not found`);
     }
 
-    this.programmingRepository.merge(programming,updateProgrammingDto);
-    
+    this.programmingRepository.merge(programming, updateProgrammingDto);
+
     return await this.programmingRepository.save(programming);
   }
 
   async remove(id: number) {
     console.log(id);
-    const pmm = await this.programmingRepository.findOneBy({id});
+    const pmm = await this.programmingRepository.findOneBy({ id });
     if (!pmm) {
       throw new Error('Programming not found');
     }
-    
+
     return await this.programmingRepository.remove(pmm);
   }
 }

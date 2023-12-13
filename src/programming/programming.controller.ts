@@ -37,15 +37,15 @@ export class ProgrammingController {
     return this.programmingService.getElements(programmingId);
   }
 
-  @Get(':id/play')
-  findAllWithElement(@Param('id') id: string) {
-    try {
-      console.log(`Ingresooo  ${id}`);
-      return this.programmingService.getAllProgrammingByProgram();
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  // @Get(':id/play')
+  // findAllWithElement(@Param('id') id: string) {
+  //   try {
+  //     console.log(`Ingresooo  ${id}`);
+  //     return this.programmingService.getAllProgrammingByProgram();
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
 
   // @Patch(':id')
   // update(
