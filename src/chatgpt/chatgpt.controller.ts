@@ -11,8 +11,8 @@ export class ChatgptController {
             const interpretacion = await this.chatgptService.getCompletion(data.text);
             return interpretacion;
         } catch (error) {
-            console.error('Error al generar la imagen:', error);
-            throw new InternalServerErrorException('Error al generar la imagen');
+            console.error('Error al generar la petición:', error);
+            throw new InternalServerErrorException('Error al generar la petición');
         }
     }
 }
