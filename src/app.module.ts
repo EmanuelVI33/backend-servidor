@@ -9,6 +9,7 @@ import { ConfigModule } from '@nestjs/config';
 import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { HostModule } from './host/host.module';
+import { ChatgptModule } from './chatgpt/chatgpt.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { HostModule } from './host/host.module';
     ElementModule,
     ProgramModule,
     HostModule,
+    ChatgptModule,
   ],
   controllers: [],
   providers: [],
