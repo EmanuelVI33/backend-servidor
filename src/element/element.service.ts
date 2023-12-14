@@ -12,7 +12,7 @@ import { DataSource, Repository } from 'typeorm';
 import { DIdService } from './service/d-id.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ElementsTriggerDto } from './dto/element-trigger';
-import { PresenterVideo } from './entities';
+import { Imagen, Music, PresenterVideo, Video } from './entities';
 import { FileService } from './service/file.service';
 import * as pathFile from 'path';
 
@@ -130,18 +130,21 @@ export class ElementService {
       const elements = await this.dataSource
         .getRepository(Element)
         .createQueryBuilder('element')
-        .leftJoinAndSelect('element.programming', 'programming')
+        .innerJoinAndSelect('element.programming', 'programming')
         .where('programming.id = :programmingId', { programmingId })
         .orderBy('element.index', 'ASC') // Obtener los elementos de acuerdo al index
         .getMany();
 
+      // console.log(elements);
+      let newElements = [];
       if (!elements || elements.length === 0) {
-        throw new NotFoundException(
-          `No elements found for programming with id ${programmingId}`,
-        );
+        return [];
+      } else {
+        newElements = elements.map((ele) => this.getTypeOfElement(ele));
       }
+      // console.log(newElements);
 
-      return elements;
+      return newElements;
     } catch (error) {
       throw new BadRequestException(`Error: ${error}`);
     }
@@ -180,5 +183,17 @@ export class ElementService {
 
   remove(id: number) {
     return `This action removes a #${id} element`;
+  }
+
+  getTypeOfElement(data) {
+    if (data instanceof Music) {
+      return { ...data, type: 'Music' };
+    } else if (data instanceof Video) {
+      return { ...data, type: 'Video' };
+    } else if (data instanceof PresenterVideo) {
+      return { ...data, type: 'PresenterVideo' };
+    } else if (data instanceof Imagen) {
+      return { ...data, type: 'Imagen' };
+    }
   }
 }

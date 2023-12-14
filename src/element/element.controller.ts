@@ -13,6 +13,8 @@ import { ElementService } from './element.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 // import { CreateElementDto } from './dto/create-element.dto';
 import { ElementsTriggerDto } from './dto/element-trigger';
+import { extname } from 'path';
+import { diskStorage } from 'multer';
 // import { UpdateElementDto } from './dto/update-element.dto';
 // import { ProgrammingService } from 'src/programming/programming.service';
 
@@ -21,12 +23,27 @@ export class ElementController {
   constructor(private readonly elementService: ElementService) {}
 
   @Post()
-  @UseInterceptors(FileInterceptor('file'))
-  create(@Body() createElementDto: any, @UploadedFile() file: any) {
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './uploads/element',
+        filename: (req, file, cb) => {
+          const uniqueSuffix =
+            Date.now() + '-' + Math.round(Math.random() * 1e9);
+          const extension = extname(file.originalname);
+          const filename = `${uniqueSuffix}${extension}`;
+          cb(null, filename);
+        },
+      }),
+    }),
+  )
+  create(@Body() createElementDto: any, @UploadedFile('file') file: any) {
+    console.log('file', file);
+    console.log('createdto ', createElementDto);
     try {
       const createdElement = this.elementService.create({
         ...createElementDto,
-        file,
+        path: file.filename,
       });
       return {
         message: 'Element created successfully',
@@ -64,9 +81,11 @@ export class ElementController {
 
   @Get('programming/:id')
   async getElementsByProgrammingId(@Param('id') programmingId: number) {
+    // console.log('herrreeeeee-------');
     try {
       const elements = await this.elementService.getElements(programmingId);
-      return { elements };
+      // console.log(elements);
+      return elements;
     } catch (error) {
       return { error: error.message || 'Internal Server Error' };
     }

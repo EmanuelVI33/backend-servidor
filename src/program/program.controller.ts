@@ -3,7 +3,7 @@ import {
   Controller,
   Get,
   Body,
-  // Patch,
+  Patch,
   Param,
   Delete,
   Post,
@@ -21,24 +21,27 @@ export class ProgramController {
   constructor(private readonly programService: ProgramService) {}
 
   @Post()
-  @UseInterceptors(FileInterceptor('cover',{
-    storage:diskStorage({
-      destination:'./uploads/cover',
-      filename: (req, file, cb) => {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-        const extension = extname(file.originalname);
-        const filename = `${uniqueSuffix}${extension}`;
-        cb(null, filename);
-      },
-    })
-  }))
+  @UseInterceptors(
+    FileInterceptor('cover', {
+      storage: diskStorage({
+        destination: './uploads/cover',
+        filename: (req, file, cb) => {
+          const uniqueSuffix =
+            Date.now() + '-' + Math.round(Math.random() * 1e9);
+          const extension = extname(file.originalname);
+          const filename = `${uniqueSuffix}${extension}`;
+          cb(null, filename);
+        },
+      }),
+    }),
+  )
   create(@UploadedFile() file, @Body('data') data: string) {
     // console.log(file);
     // const updatedPath = `cover/${file.filename}`;
     const createProgramDto = JSON.parse(data);
     createProgramDto.cover = file.filename;
     console.log(createProgramDto);
-    
+
     return this.programService.create(createProgramDto);
   }
 

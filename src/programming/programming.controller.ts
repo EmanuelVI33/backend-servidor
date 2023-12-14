@@ -34,14 +34,14 @@ export class ProgrammingController {
   @Get(':id/elements')
   getProgrammingElements(@Param('id') id: string): any {
     const programmingId = parseInt(id, 10);
-    return this.programmingService.getElements(programmingId);
+    // return this.programmingService.getElements(programmingId);
   }
 
   @Get(':id/play')
   findAllWithElement(@Param('id') id: string) {
     try {
       console.log(`Ingresooo  ${id}`);
-      return this.programmingService.getAllProgrammingByProgram();
+      // return this.programmingService.getAllProgrammingByProgram();
     } catch (error) {
       console.log(error);
     }
