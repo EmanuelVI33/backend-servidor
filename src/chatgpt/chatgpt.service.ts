@@ -27,7 +27,7 @@ export class ChatgptService {
             }
         );
 
-        console.log(`respuesta : ${JSON.stringify(response.data.error)}`);
+        // console.log(`respuesta : ${JSON.stringify(response.data.error)}`);
 
         if (response.status === 200) {
             const data = response.data;

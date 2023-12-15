@@ -113,6 +113,7 @@ export class MediaFileManager {
           reject(err);
         });
       });
+      return localFilePath;
     } catch (error) {
       console.error('Error en la petición HTTP:', error);
       throw error;

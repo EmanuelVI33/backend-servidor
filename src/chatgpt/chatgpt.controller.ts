@@ -15,4 +15,14 @@ export class ChatgptController {
             throw new InternalServerErrorException('Error al generar la petición');
         }
     }
+
+    // @Post('interaction')
+    // async hacerInteraccion(@Body() data : any) : Promise<any>{
+    //     try {
+    //         const res = await this.chatgptService.postInteraccion(data.text);
+    //         return
+    //     } catch (error) {
+            
+    //     }
+    // }
 }
