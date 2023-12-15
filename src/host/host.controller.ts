@@ -15,8 +15,13 @@ import { HostService } from './host.service';
 const s3 = new S3Client({
   region: 'us-east-2',
   credentials: {
+<<<<<<< HEAD
+    accessKeyId: 'AKIAZC2LXPKXURKAZUA4',
+    secretAccessKey: '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',
+=======
     accessKeyId: process.env.ACCESS_KEY_ID,
     secretAccessKey: process.env.SECRET_ACCESS_KEY,
+>>>>>>> 0824ad07c14916839ef2d0f9698fc168118b9432
   },
 });
 
