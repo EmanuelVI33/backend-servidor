@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Host {
@@ -9,8 +9,7 @@ export class Host {
   sex: string;
 
   @Column({
-    unique:true
+    unique: true,
   })
   photoUrl: string;
-  
 }

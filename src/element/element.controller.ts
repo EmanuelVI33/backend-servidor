@@ -8,6 +8,7 @@ import {
   Delete,
   UseInterceptors,
   UploadedFile,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { ElementService } from './element.service';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -20,7 +21,7 @@ import { diskStorage } from 'multer';
 
 @Controller('element')
 export class ElementController {
-  constructor(private readonly elementService: ElementService) {}
+  constructor(private readonly elementService: ElementService) { }
 
   @Post()
   @UseInterceptors(
@@ -64,6 +65,31 @@ export class ElementController {
     }
   }
 
+  @Post('gen-image') //archivo
+  @UseInterceptors(FileInterceptor('image'))
+  async generateImage(@UploadedFile() image, @Body('duration') duration: number) {
+    try {
+      const videoPath = await this.elementService.genImageByFile(image, duration);
+      // Devolver la ruta del video o cualquier otra información necesaria
+      return { videoPath };
+    } catch (error) {
+      console.error('Error al generar la imagen:', error);
+      throw new InternalServerErrorException('Error al generar la imagen');
+    }
+  }
+
+  @Post('gen-ima') //path
+  async generateImagePath(@Body() body: any) {
+    try {
+      console.log(`body : ${JSON.stringify(body)}`)
+      const videoPathA = await this.elementService.genImageByPath(body.image, body.duration);
+      // Devolver la ruta del video o cualquier otra información necesaria
+      return { videoPathA };
+    } catch (error) {
+      console.error('Error al generar la imagen:', error);
+      throw new InternalServerErrorException('Error al generar la imagen');
+    }
+  }
   @Get('created')
   createVideo(@Body() response: any) {
     console.log(response);

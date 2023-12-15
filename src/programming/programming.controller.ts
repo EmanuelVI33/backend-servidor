@@ -31,6 +31,7 @@ export class ProgrammingController {
     return this.programmingService.findOne(+id);
   }
 
+<<<<<<< HEAD
   @Get(':id/elements')
   getProgrammingElements(@Param('id') id: string): any {
     const programmingId = parseInt(id, 10);
@@ -46,6 +47,23 @@ export class ProgrammingController {
       console.log(error);
     }
   }
+=======
+  // @Get(':id/elements')
+  // getProgrammingElements(@Param('id') id: string): any {
+  //   const programmingId = parseInt(id, 10);
+  //   return this.programmingService.getElements(programmingId);
+  // }
+
+  // @Get(':id/play')
+  // findAllWithElement(@Param('id') id: string) {
+  //   try {
+  //     console.log(`Ingresooo  ${id}`);
+  //     return this.programmingService.getAllProgrammingByProgram();
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
+>>>>>>> 0824ad07c14916839ef2d0f9698fc168118b9432
 
   // @Patch(':id')
   // update(
